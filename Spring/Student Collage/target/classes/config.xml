@@ -1,0 +1,17 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="student" class="com.masai.Student">
+        <constructor-arg value="10"/>
+        <constructor-arg value="424"/>
+    </bean>
+
+    <bean id="collage" class="com.masai.Collage">
+        <property name="collage_name" value="Masai School"/>
+        <property name="student" ref="student"/>
+        <property name="collage_address" value="Bangalore"/>
+    </bean>
+
+</beans>
