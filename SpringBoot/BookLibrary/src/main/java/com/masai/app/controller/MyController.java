@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.masai.app.exceptions.BookNotFoundException;
 import com.masai.app.model.Book;
 
 import jakarta.annotation.PostConstruct;
@@ -25,14 +26,16 @@ public class MyController {
 	
 	@PostConstruct
 	public void onLoad() {
-		bookList.add(new Book(101, "C++", "Nitesh", "Rajput Publication", "Computer Programming", "G452", 1500, 240));
-		bookList.add(new Book(102, "Java", "Ratan", "Masai Publication", "Computer Programming", "G454", 1455, 3000));
-		bookList.add(new Book(103, "Atomic Habits", "James Clear", "James Clear", "Knowledge", "G455", 319, 988));
+		bookList.add(new Book(101, "C++", "Nitesh", 240));
+		bookList.add(new Book(102, "Java", "Ratan", 3000));
+		bookList.add(new Book(103, "Atomic Habits", "James Clear", 988));
 	}
 
 	@GetMapping("/books")
 	public List<Book> getBookListHandler() {
-		return bookList;
+		if (bookList.size() != 0)
+			return bookList;
+		throw new BookNotFoundException("Not books found to be load");
 	}
 	
 	@GetMapping("/books/{bookId}")
@@ -44,7 +47,7 @@ public class MyController {
 			}
 		}
 		if (book != null) return book;
-		throw new IllegalArgumentException("No book exists with id: " + bookId);
+		throw new BookNotFoundException("No book exists with id: " + bookId);
 	}
 	
 	@PostMapping("/books")
@@ -52,7 +55,7 @@ public class MyController {
 		
 		for (Book b : bookList) {
 			if (b.getBookId() == book.getBookId()) {
-				throw new IllegalArgumentException("A book already exists with Id: " + book.getBookId());
+				throw new BookNotFoundException("A book already exists with Id: " + book.getBookId());
 			}
 		}
 		
@@ -70,7 +73,7 @@ public class MyController {
 			}
 		}
 		
-		throw new IllegalArgumentException("No book exists with id: " + bookId);
+		throw new BookNotFoundException("No book exists with id: " + bookId);
 	}
 	
 	@PutMapping("/books/{bookId}")
@@ -83,19 +86,7 @@ public class MyController {
 			}
 		}
 		
-		throw new IllegalArgumentException("No book exists with id: " + bookId);
+		throw new BookNotFoundException("No book exists with id: " + bookId);
 	}
 	
-	@PutMapping("/updateprice/{bookId}")
-	public String updatePriceHandler(@PathVariable Integer bookId, @RequestParam("price") Integer price) {
-		
-		for (int i = 0; i < bookList.size(); i++) {
-			if (bookList.get(i).getBookId() == bookId) {
-				bookList.get(i).setPrice(price);
-				return "Book price updated successfully";
-			}
-		}
-		
-		throw new IllegalArgumentException("No book exists with id: " + bookId);
-	}
 }
