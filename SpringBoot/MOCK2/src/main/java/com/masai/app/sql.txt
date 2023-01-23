@@ -1,0 +1,19 @@
+SQL:
+SELECT * FROM Users;
+SELECT * FROM Users WHERE user_enail = 'test@gmail.com'
+
+
+JPQL:
+
+@Enity
+classs User {
+	private String name;
+	private String userEmail;
+}
+
+
+SELECT User from User;
+SELECT User FROM User WHERE userEmail = 'test@gmail.com'
+
+
+
